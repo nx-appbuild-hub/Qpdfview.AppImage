@@ -12,8 +12,13 @@
 PWD:=$(shell pwd)
 
 all: clean
-	mkdir --parents $(PWD)/build/Boilerplate.AppDir
-	apprepo --destination=$(PWD)/build appdir boilerplate qpdfview qpdfview-djvu-plugin qpdfview-ps-plugin qpdfview-translations
+	mkdir --parents $(PWD)/build/Boilerplate.AppDir/bin
+	mkdir --parents $(PWD)/build/Boilerplate.AppDir/lib64
+
+	wget --output-document=$(PWD)/build/build.deb http://archive.ubuntu.com/ubuntu/pool/main/t/texlive-bin/libsynctex2_2019.20190605.51237-3build2_amd64.deb
+	dpkg -x $(PWD)/build/build.deb $(PWD)/build/Boilerplate.AppDir/build
+
+	apprepo --destination=$(PWD)/build appdir boilerplate qpdfview qpdfview-djvu-plugin qpdfview-ps-plugin qpdfview-translations libsynctex2
 
 	cp $(PWD)/build/Boilerplate.AppDir/lib64/qpdfview/* $(PWD)/build/Boilerplate.AppDir/bin
 	echo "exec \$${APPDIR}/bin/qpdfview \"\$${@}\"" >> $(PWD)/build/Boilerplate.AppDir/AppRun
